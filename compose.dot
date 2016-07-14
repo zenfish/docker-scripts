@@ -1,0 +1,107 @@
+
+//
+// Create a PNG file from the output using:
+//
+//     dot -Tpng -o compose.png < compose.dot
+//
+
+
+digraph {
+	fhir1	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	slapd	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	fhir1 -> slapd	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	redis	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	fhir1 -> redis	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	mongo	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	fhir1 -> mongo	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	mds	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	fhir1 -> mds	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	"/opt/kadlecTST/rocksdb:/opt/db"	 [fillcolor=lightgrey,
+		fontsize=8,
+		shape=box,
+		style=filled];
+	mds -> "/opt/kadlecTST/rocksdb:/opt/db"	 [style=dashed];
+	fhir2	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	fhir2 -> slapd	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir2 -> redis	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir2 -> mongo	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir2 -> mds	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir3	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	fhir3 -> slapd	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir3 -> redis	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir3 -> mongo	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir3 -> mds	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir4	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	fhir4 -> slapd	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir4 -> redis	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir4 -> mongo	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	fhir4 -> mds	 [fillcolor=lightgray,
+		fontsize=10,
+		style=filled];
+	"load-balancer"	 [fillcolor=lightblue,
+		fontsize=10,
+		style=filled];
+	"load-balancer" -> fhir1	 [fillcolor=lightgray,
+		fontsize=10,
+		label="port(s):8080:443",
+		style=filled];
+	"load-balancer" -> fhir2	 [fillcolor=lightgray,
+		fontsize=10,
+		label="port(s):8080:443",
+		style=filled];
+	"load-balancer" -> fhir3	 [fillcolor=lightgray,
+		fontsize=10,
+		label="port(s):8080:443",
+		style=filled];
+	"load-balancer" -> fhir4	 [fillcolor=lightgray,
+		fontsize=10,
+		label="port(s):8080:443",
+		style=filled];
+}
+

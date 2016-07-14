@@ -1,0 +1,57 @@
+#
+# sample YAML file for tool use
+#
+# It's a load balancer in front of some 
+# FHIR servers (medical data servery thangz)
+#
+
+version: '2'
+services:
+  redis:
+    image: redis
+  slapd:
+    image: osixia/openldap
+  mongo:
+    image: mongo
+  mds:
+    image: multiscale:5000/mds-server
+    volumes:
+      - /opt/kadlecTST/rocksdb:/opt/db
+  fhir1:
+    image: multiscale:5000/fhir-server
+    links:
+      - slapd:slapd
+      - redis:redis
+      - mongo:mongo
+      - mds:mds
+  fhir2:
+    image: multiscale:5000/fhir-server
+    links:
+      - slapd:slapd
+      - redis:redis
+      - mongo:mongo
+      - mds:mds
+  fhir3:
+    image: multiscale:5000/fhir-server
+    links:
+      - slapd:slapd
+      - redis:redis
+      - mongo:mongo
+      - mds:mds
+  fhir4:
+    image: multiscale:5000/fhir-server
+    links:
+      - slapd:slapd
+      - redis:redis
+      - mongo:mongo
+      - mds:mds
+  load-balancer:
+    build: ./nginx
+    links:
+      - fhir1:fhir1
+      - fhir2:fhir2
+      - fhir3:fhir3
+      - fhir4:fhir4
+    ports:
+      - 8080:443
+
