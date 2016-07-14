@@ -17,7 +17,7 @@ map out -
     ports
 
 And output .dot format (it requires the graphviz dot program to create
-image files.)
+image files.) Sample image is near the bottom of this page.
 
 I tossed this together and then looked around; there are other things
 that might suit some better, like at https://github.com/funkwerk/compose_plantuml,
@@ -47,7 +47,7 @@ You can run it like:
 And that'll create a PNG called docker.png (SVGs and other formats
 are possible as well, just change the dot command.)
 
-Given a compose file, the output looks like -
+Given the included compose file, the output looks like -
 
 ![visualizing compose](https://github.com/zenfish/docker-scripts/raw/master/compose.png)
 
