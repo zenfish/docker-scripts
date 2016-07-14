@@ -7,15 +7,25 @@ three as I do some things. Right now only one lonely one.
 consume-compose.py
 --
 
-A little program to take a docker compose file and output .dot
-format.  Requires the graphviz dot program to create image files.
+A little program to take a docker compose file and try to map out
+the connections between the various pieces. Right now it tries to
+map out -
+
+    links
+    external_links
+    volumes
+    ports
+
+And output .dot format (it requires the graphviz dot program to create
+image files.)
 
 I tossed this together and then looked around; there are other things
-that might suit you better (https://github.com/funkwerk/compose_plantuml,
-https://github.com/Alexis-benoist/draw-compose, and probably others),
-but I wasn't getting what I personally wanted from their more
-advanced packages, so I thought I'd put this out there... just
-because, I guess.
+that might suit some better, like at https://github.com/funkwerk/compose_plantuml,
+and https://github.com/Alexis-benoist/draw-compose; probably there
+are others. But I wasn't getting what I personally wanted from their
+more advanced packages, so I thought I'd put this out there... just
+because, I guess. If anyone knows of something that works even better
+I'm happy to toss this, let me know!
 
 
 Mine is super simplistic and probably won't work on a compose file
@@ -34,8 +44,8 @@ You can run it like:
     # or, force it to approximately some size desired with the Dsize arg.
     dot -Gsize=6,6\! -Tpng -o compose.png < compose.dot
 
-And that'll create a PNG called docker.png (SVGs and other formats are
-possible as well, just change the dot command.)
+And that'll create a PNG called docker.png (SVGs and other formats
+are possible as well, just change the dot command.)
 
 Given a compose file, the output looks like -
 
@@ -46,7 +56,7 @@ double-lined circles ('cuz I've never actually seen one in action,
 but they're probably important ;))
 
 This requires the "dot" command to actually create any graphical
-output as well as the pygraphviz and docker compose libs 
-(e.g. "pip install pygraphviz docker-compose".)
+output as well as the pygraphviz and docker compose libs (e.g. "pip
+install pygraphviz docker-compose".)
 
 
