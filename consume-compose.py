@@ -72,7 +72,10 @@ for container, config in containers.iteritems():
     ports = ''
     # use this to add to links or other connectors if applicable
     if 'ports' in config.keys():
-        ports = 'port(s):' + ','.join(config['ports'])
+        if type(config['ports']) is list:
+            ports = 'port(s):' + ','.join(config['ports'])
+        else:
+            ports = config['ports']
 
     # treating links and external links the same
     if 'links' in config.keys():
@@ -85,7 +88,16 @@ for container, config in containers.iteritems():
 
     if 'external_links' in config.keys():
         for link in config['external_links']:
-            dvis.add_edge(container, link, style="filled", fillcolor="lightgray")
+            if ports:
+                dvis.add_edge(container, link, label=ports, style="filled", fontsize="10", fillcolor="lightgray")
+            else:
+                dvis.add_edge(container, link, style="filled", fontsize="10", fillcolor="lightgray")
+
+    # if just have ports and no links
+    if ports and not 'links' in config.keys() and not 'external_links' in config.keys():
+        dvis.add_node('EXTERNAL', fillcolor="red", style="filled")
+        dvis.add_edge(container, 'EXTERNAL', label=ports, style="filled", fontsize="8", fillcolor="red")
+
 
     # goes... to somewhere!
     if 'networks' in config.keys():
