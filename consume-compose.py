@@ -95,8 +95,8 @@ for container, config in containers.iteritems():
 
     # if just have ports and no links
     if ports and not 'links' in config.keys() and not 'external_links' in config.keys():
-        dvis.add_node('EXTERNAL', fillcolor="red", style="filled")
-        dvis.add_edge(container, 'EXTERNAL', label=ports, style="filled", fontsize="8", fillcolor="red")
+        dvis.add_node('external', fillcolor="red", style="filled")
+        dvis.add_edge(container, 'external', label=ports, style="filled", fontsize="8", fillcolor="red")
 
 
     # goes... to somewhere!
