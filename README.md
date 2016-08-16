@@ -49,11 +49,12 @@ are possible as well, just change the dot command.)
 
 Given the included compose file, the output looks like -
 
-![visualizing compose](https://github.com/zenfish/docker-scripts/raw/master/compose.png)
+![visualizing compose](compose.png)
 
-Containers are circular, volumes are boxes, and networks are red
-double-lined circles ('cuz I've never actually seen one in action,
-but they're probably important ;))
+Containers are circular, volumes are boxes, external things (e.g.
+ports open to the outside) are red, and networks are double-lined
+circles ('cuz I've never actually seen one in action, but they're
+probably important ;))
 
 This requires the "dot" command to actually create any graphical
 output as well as the pygraphviz and docker compose libs (e.g. "pip

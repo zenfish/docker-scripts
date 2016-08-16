@@ -15,11 +15,21 @@
 # it ignores lots of things that I don't understand or haven't used yet.
 #
 
+#
+# nodes are colored according to colorbrew patterns. They repeat after a 
+# dozen nodes.
+#
+
 # requires pygraphviz & docker-compose python libs
+
+#
+# Possible values - LR, RL, BT, TB... for left->right, bottom->top, etc.
+DIRECTION="TB"
 
 import sys
 import yaml
 import pygraphviz as pgv
+
 from collections import defaultdict
 # seemingly undocumented magic that might prove useful
 from compose.config.config import ConfigFile
@@ -45,7 +55,8 @@ compose       = defaultdict(lambda : defaultdict(list))
 compose_items = ["links", "external_links", "volumes", "ports"]
 
 # graph object
-dvis          = pgv.AGraph(strict=False,directed=True)
+dvis          = pgv.AGraph(strict=False,directed=True,rankdir=DIRECTION,colorscheme='set312')
+
 
 # print ConfigFile.get_service_dicts(dcompose)
 
@@ -61,15 +72,27 @@ try:
 except Exception as e:
     pass
 
+
+node_color = -1
+
+# only twelve allowed! ;)   From color brewer
+colors = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"]
+
+
 # for container, config in dcompose.config.iteritems():
 for container, config in containers.iteritems():
+
+    node_color = node_color + 1
+    if node_color == 12:
+        node_color = 1
+
+    ports = ''
 
     # print config.keys()
 
     # first add any nodes
-    dvis.add_node(container, style="filled", fillcolor="lightblue", fontsize="10")
+    dvis.add_node(container, style="filled", fillcolor=colors[node_color], fontsize="10")
 
-    ports = ''
     # use this to add to links or other connectors if applicable
     if 'ports' in config.keys():
         if type(config['ports']) is list:
@@ -82,9 +105,9 @@ for container, config in containers.iteritems():
         for link in config['links']:
             link = link.split(':')[0]
             if ports:
-                dvis.add_edge(container, link, label=ports, style="filled", fontsize="10", fillcolor="lightgray")
+                dvis.add_edge(container, link, label=ports, style="filled", fontsize="10", fillcolor=colors[node_color])
             else:
-                dvis.add_edge(container, link, style="filled", fontsize="10", fillcolor="lightgray")
+                dvis.add_edge(container, link, style="filled", fontsize="10", fillcolor=colors[node_color])
 
     if 'external_links' in config.keys():
         for link in config['external_links']:
@@ -95,8 +118,8 @@ for container, config in containers.iteritems():
 
     # if just have ports and no links
     if ports and not 'links' in config.keys() and not 'external_links' in config.keys():
-        dvis.add_node('external', fillcolor="red", style="filled")
-        dvis.add_edge(container, 'external', label=ports, style="filled", fontsize="8", fillcolor="red")
+        dvis.add_node('EXTERNAL', fillcolor="red", style="filled")
+        dvis.add_edge(container, 'EXTERNAL', label=ports, style="filled", fontsize="8", fillcolor="red")
 
 
     # goes... to somewhere!
@@ -123,8 +146,12 @@ print """
 //
 //     dot -Tpng -o %s.png < %s.dot
 //
+//  Larger graph with:
+//
+//     dot -Tpng -Gsize=8,8\! -o %s.png < %s.dot
+//
 
-""" % (filebase, filebase)
+""" % (filebase, filebase, filebase, filebase)
 
 print dvis.string()
 
