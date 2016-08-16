@@ -51,6 +51,9 @@ Given the included compose file, the output looks like -
 
 ![visualizing compose](compose.png)
 
+Nodes are colored according to colorbrew patterns. They repeat after
+a dozen nodes.
+
 Containers are circular, volumes are boxes, external things (e.g.
 ports open to the outside) are red, and networks are double-lined
 circles ('cuz I've never actually seen one in action, but they're

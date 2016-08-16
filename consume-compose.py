@@ -26,6 +26,7 @@
 # Possible values - LR, RL, BT, TB... for left->right, bottom->top, etc.
 DIRECTION="TB"
 
+import os
 import sys
 import yaml
 import pygraphviz as pgv
@@ -46,8 +47,7 @@ except Exception as e:
     sys.exit(2)
 
 filename      = sys.argv[1]
-# assume it's a foo.bar kinda file
-filebase      = filename.split('.')[0]
+filebase      = os.path.splitext(filename)[0]
 
 # this is where we draw the relationships
 compose       = defaultdict(lambda : defaultdict(list))
