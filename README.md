@@ -4,6 +4,13 @@ docker scriptz
 I've started to play with docker, so I thought I'd toss down a script or
 three as I do some things. Right now only one lonely one.
 
+dockerfile-oob
+--
+
+A trivial dockerfile that packs in various tools I use for out-of-band
+things, including binutils, freeipmi, ipmitool, strace, & wsmancli.
+
+
 consume-compose.py
 --
 
@@ -51,13 +58,9 @@ Given the included compose file, the output looks like -
 
 ![visualizing compose](compose.png)
 
-Nodes are colored according to colorbrew patterns. They repeat after
-a dozen nodes.
-
-Containers are circular, volumes are boxes, external things (e.g.
-ports open to the outside) are red, and networks are double-lined
-circles ('cuz I've never actually seen one in action, but they're
-probably important ;))
+Containers are circular, volumes are boxes, and networks are red
+double-lined circles ('cuz I've never actually seen one in action,
+but they're probably important ;))
 
 This requires the "dot" command to actually create any graphical
 output as well as the pygraphviz and docker compose libs (e.g. "pip

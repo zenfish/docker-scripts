@@ -26,7 +26,6 @@
 # Possible values - LR, RL, BT, TB... for left->right, bottom->top, etc.
 DIRECTION="TB"
 
-import os
 import sys
 import yaml
 import pygraphviz as pgv
@@ -47,7 +46,8 @@ except Exception as e:
     sys.exit(2)
 
 filename      = sys.argv[1]
-filebase      = os.path.splitext(filename)[0]
+# assume it's a foo.bar kinda file
+filebase      = filename.split('.')[0]
 
 # this is where we draw the relationships
 compose       = defaultdict(lambda : defaultdict(list))
@@ -93,28 +93,34 @@ for container, config in containers.iteritems():
     # first add any nodes
     dvis.add_node(container, style="filled", fillcolor=colors[node_color], fontsize="10")
 
-    # treating links and external links the same
-    if 'links' in config.keys():
-        for link in config['links']:
-            link = link.split(':')[0]
-            dvis.add_edge(container, link, style="filled", fontsize="10", fillcolor=colors[node_color])
-
-    if 'external_links' in config.keys():
-        for link in config['external_links']:
-            dvis.add_edge(container, link, style="filled", fontsize="10", fillcolor="lightgray")
-
-    # any ports specified
+    # use this to add to links or other connectors if applicable
     if 'ports' in config.keys():
-        # print ports
         if type(config['ports']) is list:
             ports = 'port(s):' + ','.join(config['ports'])
         else:
             ports = config['ports']
 
-    # if has ports... external inbound to....
-    if ports:
+    # treating links and external links the same
+    if 'links' in config.keys():
+        for link in config['links']:
+            link = link.split(':')[0]
+            if ports:
+                dvis.add_edge(container, link, label=ports, style="filled", fontsize="10", fillcolor=colors[node_color])
+            else:
+                dvis.add_edge(container, link, style="filled", fontsize="10", fillcolor=colors[node_color])
+
+    if 'external_links' in config.keys():
+        for link in config['external_links']:
+            if ports:
+                dvis.add_edge(container, link, label=ports, style="filled", fontsize="10", fillcolor="lightgray")
+            else:
+                dvis.add_edge(container, link, style="filled", fontsize="10", fillcolor="lightgray")
+
+    # if just have ports and no links
+    if ports and not 'links' in config.keys() and not 'external_links' in config.keys():
         dvis.add_node('EXTERNAL', fillcolor="red", style="filled")
-        dvis.add_edge('EXTERNAL', container, style="filled", fontsize="8", fillcolor="red", label=ports)
+        dvis.add_edge(container, 'EXTERNAL', label=ports, style="filled", fontsize="8", fillcolor="red")
+
 
     # goes... to somewhere!
     if 'networks' in config.keys():
